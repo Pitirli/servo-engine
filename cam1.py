@@ -7,18 +7,21 @@ GPIO.setmode(GPIO.BOARD)
 
 
 
-def pwm_control():
-    GPIO.setup(11, GPIO.OUT)
-    p = GPIO.PWM(11, 50)
-    p.start(0)
+def pwm_control(pin_number,frequency,duty_cycle_start,duty_cycle_end,duration):
+    GPIO.setmode(GPIO.BOARD)  
+    GPIO.setup(pin_number, GPIO.OUT)  
+    p = GPIO.PWM(pin_number, frequency)  
+    p.start(duty_cycle_start)  
 
-    p.ChangeDutyCycle(3)
-    sleep(1)
-    p.ChangeDutyCycle(12)
-    sleep(1)
+    try:
+        p.ChangeDutyCycle(duty_cycle_start)
+        sleep(duration)
+        p.ChangeDutyCycle(duty_cycle_end)
+        sleep(duration)
 
-    p.stop()
-    GPIO.cleanup()
+    except KeyboardInterrupt:
+        p.stop()
+        GPIO.cleanup()
 
 
 red = [0, 0, 255]
@@ -26,7 +29,7 @@ cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
 
-    hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    hsvImage=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
 
     lowerLimit =  ([0, 160,160])
     upperLimit =  ([10,255,255])
@@ -56,9 +59,8 @@ while True:
 
     cv2.imshow('frame', frame)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-          break
-
+    if cv2.waitKey(1) == 27:
+        break
 cap.release()
 
 cv2.destroyAllWindows()
