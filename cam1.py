@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import RPi.GPIO as GPIO
-from picamera2 import Picamera2, 
+from picamera2 import Picamera2
 from time import sleep
 
 GPIO.setmode(GPIO.BOARD)
