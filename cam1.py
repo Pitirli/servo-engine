@@ -1,12 +1,12 @@
-from picamera2 import Picamera2, 
+from picamera2 import Picamera2
 import cv2
 from PIL import Image
 import numpy as np
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from time import sleep
 
-GPIO.setmode(GPIO.BOARD)
-
+#GPIO.setmode(GPIO.BOARD)
+"""
 def pwm_control(pin, frequency, duty_cycle_start, duty_cycle_end, delay):
     GPIO.setup(pin, GPIO.OUT)
     p = GPIO.PWM(pin, frequency)
@@ -19,20 +19,18 @@ def pwm_control(pin, frequency, duty_cycle_start, duty_cycle_end, delay):
 
     p.stop()
     GPIO.cleanup()
-
+"""
 red = [0, 0, 255]
 
-# Initialize the camera
 picam2 = Picamera2()
-picam2.start_preview(Preview.QTGL)
-picam2.configure(picam2.preview_configuration(main={"format": "BGR888", "size": (640, 480)}))
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
 picam2.start()
 
 try:
     while True:
         frame = picam2.capture_array()
 
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+       
         hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         lowerLimit0 = np.array([0, 120, 70], dtype=np.uint8)
@@ -61,7 +59,7 @@ try:
                 cY = int(M["m01"] / M["m00"])
                 cv2.circle(frame, (cX, cY), 5, (0, 255, 0), -1)
 
-            pwm_control(11, 50, 3, 12, 1)
+            #pwm_control(11, 50, 3, 12, 1)
 
         cv2.imshow('frame', frame)
 
@@ -71,5 +69,8 @@ try:
 finally:
     picam2.stop()
     cv2.destroyAllWindows()
+
+
+
 
 
