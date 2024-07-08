@@ -2,11 +2,11 @@ from picamera2 import Picamera2
 import cv2
 from PIL import Image
 import numpy as np
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 
-#GPIO.setmode(GPIO.BOARD)
-"""
+GPIO.setmode(GPIO.BOARD)
+
 def pwm_control(pin, frequency, duty_cycle_start, duty_cycle_end, delay):
     GPIO.setup(pin, GPIO.OUT)
     p = GPIO.PWM(pin, frequency)
@@ -19,7 +19,7 @@ def pwm_control(pin, frequency, duty_cycle_start, duty_cycle_end, delay):
 
     p.stop()
     GPIO.cleanup()
-"""
+
 red = [0, 0, 255]
 
 picam2 = Picamera2()
@@ -59,7 +59,7 @@ try:
                 cY = int(M["m01"] / M["m00"])
                 cv2.circle(frame, (cX, cY), 5, (0, 255, 0), -1)
 
-            #pwm_control(11, 50, 3, 12, 1)
+            pwm_control(11, 50, 3, 12, 1)
 
         cv2.imshow('frame', frame)
 
