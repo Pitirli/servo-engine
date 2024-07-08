@@ -28,7 +28,11 @@ try:
     while True:
         frame = picam2.capture_array()
 
-        
+        hsvImage = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        lowerLimit = np.array([0, 120, 70], dtype=np.uint8)
+        upperLimit = np.array([10, 255, 255], dtype=np.uint8)
+        mask = cv2.inRange(hsvImage, lowerLimit, upperLimit)
 
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)
@@ -38,7 +42,7 @@ try:
         if contours:
             largest_contour = max(contours, key=cv2.contourArea)
             (x, y, w, h) = cv2.boundingRect(largest_contour)
-            frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 3)
 
             M = cv2.moments(largest_contour)
             if M["m00"] != 0:
